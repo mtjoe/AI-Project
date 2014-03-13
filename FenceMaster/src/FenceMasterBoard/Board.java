@@ -55,7 +55,8 @@ public class Board {
 	 * Set Poisition of with coordinates (x, y) to be occupied by Player p
 	 */
 	public void setMove(int x, int y, Player p){
-		bArray[x][y].setOccupy(p);;
+		bArray[x][y].setOccupy(p);
+		p.addPosition(this.getPosition(x, y));
 		return;
 	}
 	
