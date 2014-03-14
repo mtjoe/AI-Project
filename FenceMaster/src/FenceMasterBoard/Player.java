@@ -33,6 +33,10 @@ public class Player {
 		return this.s;
 	}
 	
+	/**
+	 * Add a Position of the position array, listing all the Positions that this Player are occupying
+	 * @param pos
+	 */
 	public void addPosition(Position pos){
 		this.positions.add(pos);
 	}

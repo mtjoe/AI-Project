@@ -13,6 +13,7 @@ public class Board {
 	 * @param n
 	 */
 	public Board(int n){
+		
 		this.n = n;
 		
 		nRow = (2*n)-1;
@@ -85,7 +86,6 @@ public class Board {
 	 * @return The name of the winner if there is a winner, null if there is no winner
 	 */
 	public String hasWinner(){
-		
 		return null;
 	}
 	
@@ -107,6 +107,16 @@ public class Board {
 			}
 			System.out.println("");
 		}
+	}
+	
+	public boolean checkTripod(){
+		// TODO
+		return false;
+	}
+	
+	public boolean checkLoop(){
+		// TODO
+		return false;
 	}
 	
 }
