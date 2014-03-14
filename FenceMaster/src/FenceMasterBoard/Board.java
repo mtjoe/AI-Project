@@ -123,6 +123,7 @@ public class Board {
 		ArrayList<Position> visited = new ArrayList<Position>();
 		for (Position p: players[0].positions){
 			if (!visited.contains(p)){
+				visited.add(p);
 				
 			}
 		}
