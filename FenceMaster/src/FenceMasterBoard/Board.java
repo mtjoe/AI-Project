@@ -1,5 +1,7 @@
 package FenceMasterBoard;
 
+import java.util.ArrayList;
+
 
 public class Board {
 	
@@ -115,7 +117,8 @@ public class Board {
 	}
 	
 	public boolean checkLoop(){
-		// TODO
+		ArrayList<Position> visited = new ArrayList<Position>();
+		
 		return false;
 	}
 	
