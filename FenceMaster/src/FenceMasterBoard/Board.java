@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 public class Board {
-	
+	private Player[] players; 
 	private Position bArray[][];
 	private int n;
 	private int nRow;
@@ -14,7 +14,8 @@ public class Board {
 	 * Initializes the board
 	 * @param n
 	 */
-	public Board(int n){
+	public Board(int n, Player[] players){
+		this.players = players;
 		
 		this.n = n;
 		
@@ -117,9 +118,17 @@ public class Board {
 	}
 	
 	public boolean checkLoop(){
-		ArrayList<Position> visited = new ArrayList<Position>();
 		
+		// Check Player 0
+		ArrayList<Position> visited = new ArrayList<Position>();
+		for (Position p: players[0].positions){
+			if (!visited.contains(p)){
+				
+			}
+		}
 		return false;
+		
+		// Check Player 1
 	}
 	
 }

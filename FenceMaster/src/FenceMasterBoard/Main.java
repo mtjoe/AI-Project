@@ -19,12 +19,14 @@ public class Main {
 			String[] entries;
 			black = new Player("Black", 'B');
 			white = new Player("White", 'W');
+			Player[] players = {black, white};
+			
 			
 			// Read first line (size of the board)
 			input=br.readLine();
 			n = Integer.parseInt(input);
 			
-			b = new Board(n);
+			b = new Board(n, players);
 			
 			// Read ((2*n)-1) lines of input
 			for (i=0; i<((2*n)-1); i++){
@@ -59,8 +61,8 @@ public class Main {
 	 */	
 	public static void main(String args[]){
 		
-		//readInput();
-		b = new Board(7);
+		readInput();
+		//b = new Board(7);
 		b.printBoard();
 		
 		return;
