@@ -19,10 +19,16 @@ public class Player {
 	
 	/* GETTER METHODS*/
 	
+	/**
+	 * @return Name of this Player
+	 */
 	public String getName(){
 		return this.name;
 	}
 	
+	/**
+	 * @return Short name of this Player
+	 */
 	public char getShort(){
 		return this.s;
 	}
