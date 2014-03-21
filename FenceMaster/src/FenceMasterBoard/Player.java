@@ -15,6 +15,7 @@ public class Player {
 		this.name = name;
 		this.s = s;
 		this.positions = new ArrayList<Position>();
+		topLeft = null;
 	}
 	
 	/* GETTER METHODS*/

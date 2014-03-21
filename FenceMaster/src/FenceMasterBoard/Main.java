@@ -41,7 +41,7 @@ public class Main {
 							b.setMove(i,  j, white);
 						} else {
 							System.out.println("Player not defined.");
-						}
+		 				}
 						
 					}
 					j++;
@@ -64,6 +64,7 @@ public class Main {
 		readInput();
 		//b = new Board(7);
 		b.printBoard();
+		b.hasWinner();
 		
 		return;
 	}
