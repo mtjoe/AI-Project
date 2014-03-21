@@ -1,8 +1,5 @@
 package FenceMasterBoard;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 public class Board {
 	private Player[] players; 
@@ -70,7 +67,7 @@ public class Board {
 	 */
 	public void setMove(int x, int y, Player p){
 		bArray[x][y].setOccupy(p);
-		p.addPosition(this.getPosition(x, y));
+		p.addPosition(this.getPosition(x, y), n);
 		return;
 	}
 	
@@ -101,18 +98,21 @@ public class Board {
 	 * @return The name of the winner if there is a winner, null if there is no winner
 	 */
 	public void hasWinner(){
+		Player winner;
 		
-		CheckLogic loopCheck = new CheckLogic(this);
-		Player p = loopCheck.checkLoop();
-		
-		if (p != null){
-			System.out.println(p.name);
-			System.out.println("Loop");
+		LoopCheck loopCheck = new LoopCheck(this);
+		if ((winner = loopCheck.check()) == null){
+			TripodCheck tripodCheck = new TripodCheck(this);
+			if ((winner = tripodCheck.check()) == null){
+				System.out.println("No Winner yet");
+			} else {
+				System.out.println(winner.name);
+				System.out.println("Tripod");
+			}
 		} else {
-			System.out.println("No Winner yet");
+			System.out.println(winner.name);
+			System.out.println("Loop");
 		}
-		
-		
 	}
 	
 	/* HELPER FUNCTIONS */
@@ -141,120 +141,4 @@ public class Board {
 		}
 		return false;
 	}
-		
-public HashMap<String, ArrayList<Position>> getStartingPoints(Player p, ArrayList<Position> visited) {
-		
-		HashMap<String, ArrayList<Position>> startingPoints = new HashMap<String, ArrayList<Position>>();
-		
-		String[] directions = new String[]{"N", "NW", "NE", "S", "SW", "SE"};
-		
-		for (String dir: directions) {
-			startingPoints.put(dir, new ArrayList<Position>());
-		}
-		
-		
-		for (Position pos: p.positions) {
-			
-			if (pos.isEdge && pos.isNonCorner && !visited.contains(pos)) {
-				if (pos.getX() == 0){
-					startingPoints.get("N").add(pos);
-				} else if (pos.getX() == ((2*n) -2)) {
-					startingPoints.get("S").add(pos);
-				} else if (pos.getY() == 0) {
-					if (pos.getX()< (n-1)){
-						startingPoints.get("NW").add(pos);
-					} else {
-						startingPoints.get("SW").add(pos);
-					}
-				} else {
-					if (pos.getX()< (n-1)){
-						startingPoints.get("NE").add(pos);
-					} else {
-						startingPoints.get("SE").add(pos);
-					}
-				}
-				
-			}
-		}
-		
-		return startingPoints;
-	}
-	
-	public boolean checkTripod() {
-		// TODO
-		
-		ArrayList<Position> visited = new ArrayList<Position>();
-		ArrayList<Position> queue = new ArrayList<Position>();
-		HashMap<String, ArrayList<Position>> startingPoints = new HashMap<String, ArrayList<Position>>();
-		int visitedpos = 0;
-		int queuepos = 0;
-		
-		for (int i=0; i<2; i++) {
-			Player player = players[i];
-			startingPoints = getStartingPoints(player, visited);
-			int tripod = 1;
-			
-			for (Entry<String, ArrayList<Position>> whichEdge:startingPoints.entrySet()) {
-				
-				for (Position pos:whichEdge.getValue()) {
-					
-					if (!visited.contains(pos)) {
-						Position start = pos;
-						visited.add(visitedpos++, start);
-					
-						while (start != null) {
-							
-							for (Entry<String, Position> entry:start.neighbors.entrySet()) {
-								String posName = entry.getKey();
-								Position realPos = entry.getValue();
-							
-								if (!visited.contains(realPos) && realPos.getOwner() == player) {
-									
-									if (whichEdge.getValue().contains(realPos)) {
-										continue;
-									}
-									
-									if (realPos.isEdge && realPos.isNonCorner) {
-										visited.add(visitedpos++, realPos);
-										tripod++;
-										
-										if (tripod == 3) {
-											return true;
-										}
-										start = queue.get(queue.size()-1);
-										break;
-									}
-									
-									visited.add(visitedpos++, realPos);
-									queue.add(queuepos++, realPos);
-									start = realPos;
-								}  
-							}
-						}
-						if (queue.size() == 0) {
-							break;
-						
-						} /*else {
-							int fixSize = queue.size();
-							
-							for (int j=fixSize-1; j>=0; j++) {
-								Position current = queue.get(j);
-								
-								if (visited.contains(current)) {
-									queue.remove(j);
-								
-								} else {
-									start = current;
-									break;
-								}
-						}*/
-					}
-				}
-			}
-			
-		}
-		return false;
-		
-	}
-	
 }
