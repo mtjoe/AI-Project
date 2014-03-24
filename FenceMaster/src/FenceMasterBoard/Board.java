@@ -135,6 +135,9 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * @return true if pos1 and pos2 are adjacent/neighbors, false otherwise
+	 */
 	public boolean isAdjacent(Position pos1, Position pos2){
 		if (pos1.getNeighbors().contains(pos2)){
 			return true;

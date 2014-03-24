@@ -31,7 +31,6 @@ public class LoopCheck implements CheckLogic{
 				}
 			}
 		}
-		
 		return null;
 	}
 	

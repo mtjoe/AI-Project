@@ -39,13 +39,16 @@ public class Player {
 	public char getShort(){
 		return this.s;
 	}
-	
+
 	/**
 	 * Add a Position of the position array, listing all the Positions that this Player are occupying
 	 * @param pos
 	 */
 	public void addPosition(Position pos, int n){
 		this.positions.add(pos);
+		
+		// Pre-set hash map startingPoints, whose function is to group together 
+		// 	the non-corner, edge positions that are on the same side.
 		if (pos.isEdge && pos.isNonCorner) {
 			if (pos.getX() == 0){
 				startingPoints.get("N").add(pos);
@@ -64,7 +67,6 @@ public class Player {
 					startingPoints.get("SE").add(pos);
 				}
 			}
-			
 		}
 	}
 }

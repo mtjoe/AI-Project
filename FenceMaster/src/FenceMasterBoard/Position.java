@@ -36,6 +36,11 @@ public class Position {
 		
 	}
 	
+	/**
+	 * Set the class variable "neighbors" in this position, which is an HashMap which 
+	 * maps the directions in String (e.g. "N", "NW", "SE", etc) to the Position in 
+	 * the respective adjacent direction Position.	 
+	 * */
 	public void setNeighbors(){
 		HashMap<String, int[]> neighborsCoord = this.getNeighborsCoordinates();
 		
@@ -48,6 +53,11 @@ public class Position {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return a HashMap, which maps the direction in String (e.g. "N", "NW", "SE", etc) 
+	 * to a two-entry integer array, containing the coordinates {x, y}
+	 */
 	private HashMap<String, int[]> getNeighborsCoordinates(){
 		HashMap<String, int[]> neighborsCoord = new HashMap<String, int[]>();
 		
@@ -73,6 +83,9 @@ public class Position {
 		return neighborsCoord;
 	}
 	
+	/**
+	 * If this Position is an edge position, set the variable 'isEdge' as true, false otherwise
+	 */
 	private void setIsEdge(){
 		if ((x == 0) || (y == 0) || (x == ((2*n)-2)) || ((y-x) == (n-1)) || (y == (x + (n-1) - ((x-n+1)*2)))){
 			this.isEdge = true;
@@ -81,6 +94,9 @@ public class Position {
 		}
 	}
 	
+	/**
+	 * If this Position is a non-corner position, set the variable 'isNonCorner' as true, false otherwise
+	 */
 	private void setIsNonCorner(){
 		if ((Math.abs(x) % (n-1) == 0) && (Math.abs(y) % (n-1) == 0) && ((x != (n-1)) || (y != (n-1)))){
 			this.isNonCorner = false;
@@ -101,6 +117,9 @@ public class Position {
 	
 	/* GETTER METHODS */
 	
+	/**
+	 * @return an ArrayList, consisting of the valid neighboring Positions of this Position
+	 */
 	public ArrayList<Position> getNeighbors(){
 		return (ArrayList<Position>)this.neighbors.values();
 	}
@@ -173,6 +192,11 @@ public class Position {
 		return this.neighbors.get("W");
 	}
 	
+	/**
+	 * @return an ArrayList, consisting of the neighboring positions that 
+	 * are occupied by the Player occupying this Position, not including
+	 * Position prev from the ArrayList.
+	 */
 	public ArrayList<Position> getSameNeighbors(Position prev){
 		ArrayList<Position> sameNeighbors = new ArrayList<Position>();
 		
@@ -191,6 +215,9 @@ public class Position {
 		return sameNeighbors;
 	}
 	
+	/**
+	 * @return true if the position in coordinates (x, y) are valid positions (i.e. withing the board), false otherwise
+	 */
 	public static boolean isValidPosition(int n, int x, int y){
 		
 		if ((x >= 0) && (y >= 0) && (x <= ((2*n)-2))){
