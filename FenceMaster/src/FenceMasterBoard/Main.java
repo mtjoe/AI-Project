@@ -1,71 +1,89 @@
 package FenceMasterBoard;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class Main {
-	
+
 	static Board b;
 	static Player black;
 	static Player white;
-	
-	public static void readInput() {
-		try{
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	 
-			String input;
-			int i, n;
-			String[] entries;
-			black = new Player("Black", 'B');
-			white = new Player("White", 'W');
-			Player[] players = {black, white};
-			
-			
-			// Read first line (size of the board)
-			input=br.readLine();
-			n = Integer.parseInt(input);
-			
-			b = new Board(n, players);
-			
-			// Read ((2*n)-1) lines of input
-			for (i=0; i<((2*n)-1); i++){
-				int j = 0;
-				input=br.readLine();
-				entries = input.split(" ");
-				for (String e:entries){
-					if (!e.equals("-")) {
-						if (e.charAt(0) == black.s){
-							b.setMove(i, j, black);
-						} else if (e.charAt(0) == white.s){
-							b.setMove(i,  j, white);
-						} else {
-							System.out.println("Player not defined.");
-		 				}
-						
-					}
-					j++;
-				}
+
+	/**
+	 * Read input, form a board of minimum size 5
+	 * 
+	 * Input format: 
+	 * [Size of Board] 
+	 * [Current Board Form, use '-' for empty position, and Player's short 
+	 * name for Positions that is occupied by the Player]
+	 * 
+	 * @param players
+	 *            - Array of size 2, containing the {@link Player} objects
+	 */
+	public static void readInput(Player[] players) {
+
+		Scanner sc = new Scanner(System.in);
+		String input;
+		int i, n;
+		String[] entries;
+
+		/* Get value of n */
+
+		// Read input
+		input = sc.nextLine();
+		n = Integer.parseInt(input);
+
+		// Read first line (size of the board)
+		if (n < 5) {
+			System.out.println("Minimum size of board is 5");
+			return;
+		}
+
+		/* Initialize and set moves on board */
+
+		b = new Board(n, players);
+
+		// Read ((2*n)-1) lines of input
+		for (i = 0; i < ((2 * n) - 1); i++) {
+			int j = 0;
+			input = sc.nextLine();
+			entries = input.split(" ");
+
+			// Check if input line of valid size
+			if (entries.length != ((i < n) ? (i + n) : ((3 * n) - i - 2))) {
+				System.out.println("Please put in a valid board input");
 			}
-	 
-		}catch(IOException io){
-			io.printStackTrace();
-		}	
+
+			// If valid, loop through the entries, and add moves to the board
+			for (String e : entries) {
+				if (!e.equals("-")) {
+					if (e.charAt(0) == black.s) {
+						b.setMove(i, j, black);
+					} else if (e.charAt(0) == white.s) {
+						b.setMove(i, j, white);
+					} else {
+						System.out.println("Player not defined.");
+					}
+
+				}
+				j++;
+			}
+		}
 		return;
 	}
-	
-	
-	/** 
-	 * Main Function
-	 *	- For each input, create a board out of it, then 
-	 */	
-	public static void main(String args[]){
-		
-		readInput();
-		//b = new Board(7);
-		b.printBoard();
+
+	/**
+	 * main
+	 */
+	public static void main(String args[]) {
+		// Initialize Players
+		Player[] players = { new Player("Black", 'B'), new Player("White", 'W') };
+
+		// Set board based on input
+		readInput(players);
+
+		// Check for winner
 		b.hasWinner();
-		
+
 		return;
 	}
 }

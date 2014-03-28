@@ -142,10 +142,16 @@ public class Position {
 		return this.occupiedBy;
 	}
 	
+	/**
+	 * @return x-coordinate of this position
+	 */
 	public int getX(){
 		return this.x;
 	}
 	
+	/**
+	 * @return y-coordinate of this position
+	 */
 	public int getY(){
 		return this.y;
 	}
@@ -233,4 +239,27 @@ public class Position {
 		}
 		return false;
 	}
+	
+	
+	/**
+	 * @return the straight line distance of p1 from p2
+	 */
+	public static double getRealDistance(int n, Position p1, Position p2){
+		return Math.sqrt(Math.pow((getRealPosition(n, p1)[0] - getRealPosition(n, p2)[0]), 2) + (Math.pow((getRealPosition(n, p1)[1] - getRealPosition(n, p2)[1]), 2)));
+	}
+	
+	/**
+	 * @return the real coordinates of pos
+	 */
+	public static double[] getRealPosition(int n, Position pos){
+		int x = pos.getX();
+		int y = pos.getY();
+		
+		if (x <= n-1){
+			return new double[]{(x+1), (y+1+(0.5*(n-x-1)))};
+		} else {
+			return new double[]{(x+1), (y+2+(0.5*(x-n-1)))};
+		}
+	}
+	
 }

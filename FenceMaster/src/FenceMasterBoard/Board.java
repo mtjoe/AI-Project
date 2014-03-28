@@ -102,6 +102,15 @@ public class Board {
 		
 		LoopCheck loopCheck = new LoopCheck(this);
 		if ((winner = loopCheck.check()) == null){
+			System.out.println("No winner yet");
+		} else {
+			System.out.println(winner.name);
+			System.out.println("Loop");
+		}
+		
+		/*
+		LoopCheck loopCheck = new LoopCheck(this);
+		if ((winner = loopCheck.check()) == null){
 			TripodCheck tripodCheck = new TripodCheck(this);
 			if ((winner = tripodCheck.check()) == null){
 				System.out.println("No Winner yet");
@@ -112,7 +121,7 @@ public class Board {
 		} else {
 			System.out.println(winner.name);
 			System.out.println("Loop");
-		}
+		}*/
 	}
 	
 	/* HELPER FUNCTIONS */
@@ -121,13 +130,20 @@ public class Board {
 	 * For testing purposes
 	 */
 	public void printBoard(){
+		// Loop through all the elements in bArray
 		for (int i=0; i<this.bArray.length; i++){
 			for(int j=0; j<this.bArray[i].length; j++){
+				
+				// Prints out "-" if Position empty
 				if (this.bArray[i][j].isEmpty()){
 					System.out.print("-");
+					
+				// If not empty, prints out short name of owner of the Position
 				} else {
 					System.out.print(this.bArray[i][j].getOwner().s);
+					
 				}
+				//System.out.print("{"+ Position.getRealPosition(n, bArray[i][j])[0] + ", " + Position.getRealPosition(n, bArray[i][j])[1] +"}");
 				
 				System.out.print(" ");
 			}

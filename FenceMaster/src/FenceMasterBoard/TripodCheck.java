@@ -71,20 +71,7 @@ public class TripodCheck {
 						if (queue.size() == 0) {
 							break;
 						
-						} /*else {
-							int fixSize = queue.size();
-							
-							for (int j=fixSize-1; j>=0; j++) {
-								Position current = queue.get(j);
-								
-								if (visited.contains(current)) {
-									queue.remove(j);
-								
-								} else {
-									start = current;
-									break;
-								}
-						}*/
+						}
 					}
 				}
 			}

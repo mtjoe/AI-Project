@@ -17,6 +17,7 @@ public class Player {
 		this.name = name;
 		this.s = s;
 		this.positions = new ArrayList<Position>();
+		startingPoints = new HashMap<String, ArrayList<Position>>();
 		
 		// Initialize starting Points
 		for (String dir: new String[]{"N", "NW", "NE", "S", "SW", "SE"}) {
