@@ -50,7 +50,7 @@ public class Player {
 		
 		// Pre-set hash map startingPoints, whose function is to group together 
 		// 	the non-corner, edge positions that are on the same side.
-		if (pos.isEdge && pos.isNonCorner) {
+		/*if (pos.isEdge && pos.isNonCorner) {
 			if (pos.getX() == 0){
 				startingPoints.get("N").add(pos);
 			} else if (pos.getX() == ((2*n) -2)) {
@@ -68,6 +68,13 @@ public class Player {
 					startingPoints.get("SE").add(pos);
 				}
 			}
+		}*/
+		// Pre-set hash map startingPoints, whose function is to group together 
+		// 	the non-corner, edge positions that are on the same side.
+		if (pos.isEdge && pos.isNonCorner) {
+			//get which edge this position is in the board
+			startingPoints.get(pos.getWhichEdge()).add(pos);
+			
 		}
 	}
 }

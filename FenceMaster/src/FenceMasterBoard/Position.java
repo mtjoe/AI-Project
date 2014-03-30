@@ -17,6 +17,7 @@ public class Position {
 	public boolean isNonCorner;
 	private Player occupiedBy;
 	private HashMap<String, Position> neighbors;
+	private String whichEdge;
 	
 	/* PUBLIC CONSTRUCTOR */
 	
@@ -25,15 +26,47 @@ public class Position {
 		this.x = x;
 		this.y = y;
 		n = b.getN();
+		whichEdge = null;
 		
 		this.neighbors = new HashMap<String, Position>();
 		
 		this.occupiedBy = null;
 		
-		
 		this.setIsEdge();
 		this.setIsNonCorner();
-		
+		this.setWhichEdge();
+	}
+	
+	/**
+	 *@return Set which side of player in the board
+	*/
+	private void setWhichEdge() {
+		if (this.isEdge && this.isNonCorner) {
+			if (this.x == 0){
+				this.whichEdge = "N";
+
+			} else if (this.x == ((2*n) -2)) {
+				this.whichEdge ="S";
+
+			} else if (this.y == 0) {
+
+				if (this.x< (n-1)){
+					this.whichEdge ="NW";
+
+				} else {
+					this.whichEdge ="SW";
+				}
+
+			} else {
+
+				if (this.x< (n-1)){
+					this.whichEdge ="NE";
+					
+				} else {
+					this.whichEdge ="SE";
+				}
+			}
+		}
 	}
 	
 	/**
@@ -260,6 +293,10 @@ public class Position {
 		} else {
 			return new double[]{(x+1), (y+2+(0.5*(x-n-1)))};
 		}
+	}
+	
+	public String getWhichEdge() {
+		return this.whichEdge;
 	}
 	
 }

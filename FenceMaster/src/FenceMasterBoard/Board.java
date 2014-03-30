@@ -100,12 +100,12 @@ public class Board {
 	public void hasWinner(){
 		Player winner;
 		
-		LoopCheck loopCheck = new LoopCheck(this);
-		if ((winner = loopCheck.check()) == null){
+		TripodCheck tripodCheck = new TripodCheck(this);
+		if ((winner = tripodCheck.check()) == null){
 			System.out.println("No winner yet");
 		} else {
 			System.out.println(winner.name);
-			System.out.println("Loop");
+			System.out.println("Tripod");
 		}
 		
 		/*

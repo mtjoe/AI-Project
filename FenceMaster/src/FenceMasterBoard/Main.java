@@ -19,7 +19,7 @@ public class Main {
 	 * @param players
 	 *            - Array of size 2, containing the {@link Player} objects
 	 */
-	public static void readInput(Player[] players) {
+	public static boolean readInput(Player[] players) {
 
 		Scanner sc = new Scanner(System.in);
 		String input;
@@ -35,7 +35,7 @@ public class Main {
 		// Read first line (size of the board)
 		if (n < 5) {
 			System.out.println("Minimum size of board is 5");
-			return;
+			return false;
 		}
 
 		/* Initialize and set moves on board */
@@ -51,24 +51,26 @@ public class Main {
 			// Check if input line of valid size
 			if (entries.length != ((i < n) ? (i + n) : ((3 * n) - i - 2))) {
 				System.out.println("Please put in a valid board input");
+				return false;
 			}
 
 			// If valid, loop through the entries, and add moves to the board
 			for (String e : entries) {
 				if (!e.equals("-")) {
-					if (e.charAt(0) == black.s) {
-						b.setMove(i, j, black);
-					} else if (e.charAt(0) == white.s) {
-						b.setMove(i, j, white);
+					if (e.charAt(0) == players[0].s) {
+						b.setMove(i, j, players[0]);
+					} else if (e.charAt(0) == players[1].s) {
+						b.setMove(i, j, players[1]);
 					} else {
 						System.out.println("Player not defined.");
+						return false;
 					}
 
 				}
 				j++;
 			}
 		}
-		return;
+		return true;
 	}
 
 	/**
@@ -79,11 +81,10 @@ public class Main {
 		Player[] players = { new Player("Black", 'B'), new Player("White", 'W') };
 
 		// Set board based on input
-		readInput(players);
-
-		// Check for winner
-		b.hasWinner();
-
+		if (readInput(players)){
+			// Check for winner
+			b.hasWinner();
+		}
 		return;
 	}
 }
