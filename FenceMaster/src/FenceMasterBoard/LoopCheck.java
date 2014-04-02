@@ -5,12 +5,23 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 
+ * @author Marisa Tjoe (566322) & Erlangga Satria Gama (570748)
+ *
+ */
 public class LoopCheck implements CheckLogic {
-	Board b; // Board that needs loop-checking
-	ArrayList<Position> visited; // Keeps track of the visited Positions
-	LinkedList<Position> currentPath; // Keeps track of the current path taken
-										// by the graph searching algorithm
-	Player currentPlayer; // The player currently being checked
+	// Board that needs loop-checking
+	Board b; 
+	
+	// Keeps track of the visited Positions
+	ArrayList<Position> visited; 
+	
+	// Keeps track of the current path taken by the graph searching algorithm
+	LinkedList<Position> currentPath;
+	
+	// The player currently being checked
+	Player currentPlayer; 
 
 	/* PUBLIC CONSTRUCTOR */
 
@@ -30,6 +41,7 @@ public class LoopCheck implements CheckLogic {
 		// Loop through each player
 		for (Player p : b.getPlayers()) {
 			currentPlayer = p;
+			
 			// Loop through each position that the player is occupying
 			for (Position pos : p.positions) {
 				if (!visited.contains(pos)) {
@@ -58,27 +70,24 @@ public class LoopCheck implements CheckLogic {
 		for (Position neighbor : pos.getSameNeighbors(prev)) {
 
 			// If the current position has a neighbor that was visited before,
-			// might be a loop
+			// might be a loop and minimum of 5 Positions to form a valid loop
 			if (visited.contains(neighbor)) {
-				if (currentPath.contains(neighbor)) {
+				if ((currentPath.contains(neighbor)) && ((currentPath.indexOf(pos) - currentPath
+						.indexOf(neighbor)) >= 5)) {
+					
+					// Make a List of Positions, containing all the
+					// Positions in the suspected loop
+					List<Position> currentLoop = currentPath.subList(
+							currentPath.indexOf(neighbor) + 1,
+							currentPath.indexOf(pos));
 
-					// Minimum of 5 Positions to form a valid loop
-					if ((currentPath.indexOf(pos) - currentPath
-							.indexOf(neighbor)) >= 5) {
-
-						// Make a List of Positions, containing all the
-						// Positions in the suspected loop
-						List<Position> currentLoop = currentPath.subList(
-								currentPath.indexOf(neighbor) + 1,
-								currentPath.indexOf(pos));
-
-						// Checks whether center Position(s) is/are either owned
-						// by a different player or is/are empty. If it is,
-						// return true
-						if (centerDifferent(currentLoop)) {
-							return true;
-						}
+					// Checks whether center Position(s) is/are either owned
+					// by a different player or is/are empty. If it is,
+					// return true
+					if (centerDifferent(currentLoop)) {
+						return true;
 					}
+					
 				}
 			} else {
 				// If neighbor is already visited, apply DFS to it
@@ -144,7 +153,7 @@ public class LoopCheck implements CheckLogic {
 				// Position and the next loop Position in the row, and the gap
 				// is either empty or owned by another player
 				Position currColPos = this.b.getPosition(currRow,
-						rowCurrentPath.get(currRow).getFirst()).getE();
+						rowCurrentPath.get(currRow).getFirst()).getNeighborInDir("E");
 
 				while (!(rowCurrentPath.get(currRow)
 						.contains(currColPos.getY()))) {
@@ -153,7 +162,7 @@ public class LoopCheck implements CheckLogic {
 									.equals(this.currentPlayer)) {
 						return true;
 					}
-					currColPos = currColPos.getE();
+					currColPos = currColPos.getNeighborInDir("E");
 				}
 			}
 		}

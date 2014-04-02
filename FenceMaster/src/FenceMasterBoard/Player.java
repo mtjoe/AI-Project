@@ -3,6 +3,11 @@ package FenceMasterBoard;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * 
+ * @author Marisa Tjoe (566322) & Erlangga Satria Gama (570748)
+ *
+ */
 public class Player {
 	
 	/* ATTRIBUTES */

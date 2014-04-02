@@ -2,6 +2,11 @@ package FenceMasterBoard;
 
 import java.util.Scanner;
 
+/**
+ * 
+ * @author Marisa Tjoe (566322) & Erlangga Satria Gama (570748)
+ *
+ */
 public class Main {
 
 	static Board b;
@@ -30,7 +35,7 @@ public class Main {
 
 		// Read input
 		input = sc.nextLine();
-		n = Integer.parseInt(input);
+		n = Integer.parseInt(input.substring(0, 1));
 
 		// Read first line (size of the board)
 		if (n < 5) {
@@ -74,7 +79,9 @@ public class Main {
 	}
 
 	/**
-	 * main
+	 * main function
+	 * - Read Input
+	 * - Check for winner
 	 */
 	public static void main(String args[]) {
 		// Initialize Players

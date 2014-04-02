@@ -23,109 +23,182 @@ public class TripodCheck {
 		visitedEdge = new ArrayList<String>();
 	}
 
-	private Position checkCurrent(Position neighbors, Position current) {
-		
-		if (!this.visited.contains(neighbors)) {
+	/**
+	* @return the last element in queue, or null if there is nothing in queue
+	*/
+	private Position getCurrentFromQueue() {
+		Position current;
 
+		if (this.queue.size() > 0) {
+			current = this.queue.getLast();
+			//this.queue.remove(current);
+			return current;
+
+		} else {
+			return null;
+		}
+	}
+	/*
+	private void printQueue() {
+		if (this.queue.size() > 0) {
+			System.out.println(" queue : ");
+			for (Position pos:this.queue) {
+				System.out.println("(" + pos.getX() + ", " + pos.getY() +  ") ; ");
+			}
+		}
+	}*/
+
+	/**
+	* @return current, if the neighbors is already visited before. Otherwise, return 
+	* the neighbors node for further exploration in runDFS function. Return null, 
+	* if the goal state is found and there is nothing in queue or tripod is found.
+	*/
+	private Position checkCurrent(Position neighbors, Position current) {
+		Position result = current;
+
+		/*if not yet visited, mark it as visited*/
+		if (!this.visited.contains(neighbors)) {
+			//System.out.println("add neighbors to visited" + neighbors.getX() + " " + neighbors.getY());
 			this.visited.add(neighbors);
 
-			/*if the node is the edge and non-corner position*/
+			/*check if the neighbor is the edge non-corner*/
 			if (neighbors.isEdge && neighbors.isNonCorner) {
 				
-				/*check if it is in the same edge as the starting point*/
+				/*if it is in the same other side of the board, check the queue*/
 				if (this.visitedEdge.contains(neighbors.getWhichEdge())) {
 					
-					//get back to the last point in the queue and remove it
-					if (this.queue.size() > 0) {
-						current = this.queue.getLast();
-						return current;
-
+					/*if current is the edge, then explore the neighbor to 
+					*find other neighbors from this point
+					*/
+					if (current.isEdge) {
+						result = neighbors;
+					
+					/*if current is not at the edge, then find the last 
+					*position from the queue
+					*/	
 					} else {
-						return null;
+						result =  getCurrentFromQueue();
 					}
-					
-					
-				/*if not, then it is one of the goal node*/
+				
+				/*if not, then it must be the goal state*/	
 				} else {
-
-					//add the number of tripod found and put it as visited
 					this.tripod++;
-					this.visited.add(neighbors);
 					this.visitedEdge.add(neighbors.getWhichEdge());
-					if (this.tripod == 3) {
-						return current;
 					
-					/*already find one goal, back to the last point when 
-					 * the node has more than one neighbors to find other
-					 * goal
-					 */
-					} else {
-						
-						//get back to the last point in the queue
-						if (this.queue.size() > 0) {
-							current = this.queue.getLast();
-							return current;
+					/*no node to check*/	
+					if (this.tripod == 3) {
+						result =  null;
 
-						} else {
-							return null;
-						}
+					/*check the queue*/
+					} else {	
+						result =  getCurrentFromQueue();
 					}
 				}
-			
 
-			/*if not the edge and non-corner, then explore this neighbor*/
+			/*if it is not the edge, return it for further exploration*/	
 			} else {
-				return neighbors;
-			} 
+				//System.out.println("return neighbors: " + neighbors.getX() + " " + neighbors.getY());
+				result =  neighbors;
+			}
 		}
-		return null;
+		/*return current, to find other unvisited node*/
+		/*if (result != null ){
+			System.out.println("return result: " + result.getX() + " " + result.getY());	
+		}*/
+		
+		return result;	
 	}
 	
 	/**
-	 * @return True if there is tripod, false if not 
+	 * @return True if there is a tripod, false if not 
 	 */
 	private boolean runDFS(Position pos) {
 		
+		int numLoop = 0;
+		Position before = null;
 		Position current = pos;
-		Position currentBe;
-		visited.add(current);
+		Position neighborPoint = null;
+		Position currentBe = current;
+		
 
 		/*keep looping when there is something to read*/
-		while (current != null) {
+		while (current != null && this.tripod != 3) {
 			
-			ArrayList<Position> neighborsArray = current.getSameNeighbors(null);
+			//printQueue();
+			numLoop = 0;
+			//System.out.println("current : " + current.getX() + " " + current.getY());
+			visited.add(current);
+			//System.out.println("add current to visited");
+			//System.out.println("tripod : " + this.tripod + "----------");
+			/*get the array of the same neighbor*/
+			ArrayList<Position> neighborsArray = current.getSameNeighbors(before);
 			
-			if (neighborsArray.size() < 2) {
-				currentBe = checkCurrent(neighborsArray.get(0), current);
-			
-			} else {			
+			//System.out.println("neighborPoint: " + neighborPoint.getX() + " " + neighborPoint.getY());
+
+			/*if the same neighbor only 1*/
+			if (neighborsArray.size() == 1) {
+					neighborPoint = neighborsArray.get(0);
+					currentBe = checkCurrent(neighborPoint, current);
+					/*if (currentBe != null) {
+						System.out.println("currentBe 1 : " + currentBe.getX() + " " + currentBe.getY());
+					}*/
+			/*if the neighbors are more than 1, put the current in queue for later check, then 
+			find the unvisited neighbor and explore it*/	
+			} else if (neighborsArray.size() > 1){			
 				
 				if (!this.queue.contains(current)) {
 					this.queue.addLast(current);
+				} else {
+					this.queue.remove(current);
 				}
+				//printQueue();
+				/*find the unvisited neighbor*/
+				for (Position neighbors:neighborsArray) {
 
-				for (Position neighbors: neighborsArray) {
-
-					/*remove it from the neighbor list in order to avoid the 
-					 * double reading from this position
-					 */
-					neighborsArray.remove(neighbors);
-					
 					currentBe = checkCurrent(neighbors, current);
-
+					/*if (currentBe != null) {
+						System.out.println("currentBe: " + currentBe.getX() + " " + currentBe.getY());
+					}*/
+					numLoop++;
+					if (currentBe != current) {
+						break;
+					
+					/*to avoid the cycle of the loop, stop checking when there
+					*is no unvisited node
+					*/
+					} else if (currentBe == current && numLoop == neighborsArray.size()) {
+						
+						/*if it is in the queue, remove it first*/ 
+						if (this.queue.contains(currentBe)) {
+							this.queue.remove(currentBe);
+						}
+						//get from the queue
+						currentBe = getCurrentFromQueue();
+						//System.out.println("currentBe is null");
+						break;
+					}	
+						
 				}
-			}
-
-			if (currentBe == queue.getLast()) {
-				this.queue.remove(current);
+				
+			/*if there is no same neighbor, stop*/
+			} else if (neighborsArray.size() == 0) {
+				//System.out.println("no neighbors");
+				break;
+			} 
 			
-			} else if (currentBe == current) {
-				return true;
-			}
+			/*store the current node, and move it to the neighbor*/
+			before = current;
+			//System.out.println("before : " + before.getX() + " " + before.getY()); 
 			current = currentBe;
+			
+			
+		} 
+		/*if tripod is found, return true*/
+		if (this.tripod == 3) {
+			return true;
+		} else {
+			return false;
 		}
-
-		return false;
 	}
 	
 	/**
@@ -137,26 +210,29 @@ public class TripodCheck {
 		for (Player player:b.getPlayers()) {
 			startingPoints = player.startingPoints;
 			tripod = 1;
-				
+			this.visitedEdge.clear();	
 			/*Loop through each edge non-corner side in the board*/
 			for (Entry<String, ArrayList<Position>> whichEdge:startingPoints.entrySet()) {
 				
-				this.visitedEdge.clear();			
-				this.visitedEdge.add(whichEdge.getKey());
+				if (!this.visitedEdge.contains(whichEdge.getKey())) {
+					this.visitedEdge.add(whichEdge.getKey());
 
-				/*check if there is any player in the current side*/
-				if (whichEdge.getValue().size() > 0) {
-
-					/*get the position in the edge non-corner of the player*/
-					for (Position pos:whichEdge.getValue()) {
-
-						/*if not yet visited, run the search to explore the nodes*/
-						if (!this.visited.contains(pos)) {
-							if (runDFS(pos)) {
-								return player;
-					
-							}
-						}		
+					/*check if there is any player in the current side*/
+					if (whichEdge.getValue().size() > 0) {
+						
+						/*get the position in the edge non-corner of the player*/
+						for (Position pos:whichEdge.getValue()) {
+							System.out.println("switch! " + pos.getX() + " " + pos.getY());
+							
+							/*if not yet visited, run the search to explore the nodes*/
+							if (!this.visited.contains(pos)) {
+								
+								if (runDFS(pos)) {
+									return player;
+						
+								}
+							}		
+						}
 					}
 				}
 			} 

@@ -1,0 +1,65 @@
+AI Project 1
+
+Members:
+ - Erlangga Satria Gama
+ - Marisa Tjoe
+
+Description:
+____________
+
+The purpose of this program is to check whether there is a winner in a given Fence Master Board. It checks the presense of a loop and a tripod seperately. The first line of the input should be the size of the sides of the board, this value will be read, and an Object of type 'Board' will be formed.
+
+Classes:
+ - Main.java
+ 	- Contains the main function, and also a private function 'readInput' that takes in the user input and initializes the Board.
+ - Board.java
+ 	- The Board comes in the form of a 2-D array of Position Objects, to represent each slot in the Board.
+ - Position.java
+ 	- Each Position has an x and y value to represent their coordinates in the Board
+ 	- Each Position has an Player owner, if it's an empty position, owner is set to null
+ 	- Has boolean attributes isEdge and isCorner to tell whether they are an edge Position or a corner Position
+ 	- Has attribute neighbors, a hashmap of 
+ - Player.java
+ 	- 
+ - CheckLogic.java (interface)
+ - TripodCheck.java
+ 	- Implements Checklogic
+ - LoopCheck.java
+ 	- Implements CheckLogic
+
+
+Pseudocodes:
+____________
+
+LoopCheck():
+	for p in players:
+		for pos in players.getPositions:
+			if pos is not visited:
+				if DFS(pos, null) returns true:
+					return p
+	return null
+
+DFS(pos, prev):
+	visited(pos)
+	currentPath(pos)
+
+	for n in pos.neighbors:
+		if n is visited:
+			if (n in currentPath) and (sizeOfLoop >= 5):
+				if centerDifferent(LoopArray) returns true:
+					return true;
+		else:
+			if DFS(n, pos) returns true:
+				return true
+
+	currentPath.remove(pos)
+	return false
+
+centerDifferent():
+
+
+
+LoopCheck time complexity: O()
+
+
+

@@ -1,6 +1,10 @@
 package FenceMasterBoard;
 
-
+/**
+ * 
+ * @author Marisa Tjoe (566322) & Erlangga Satria Gama (570748)
+ *
+ */
 public class Board {
 	private Player[] players; 
 	private Position bArray[][];
@@ -10,12 +14,15 @@ public class Board {
 	
 	
 	/**
-	 * Initializes the board
-	 * @param n
+	 * Initializes an empty Board with number of sides n
+	 * - Given the size of each sides of the board n, 
+	 * 		- The number of rows of the Board would be ((2*n)-1)
+	 * 		- The number of columns in rows 0 to (n-1) would be (n+i)
+	 * 		- The number of columns in rows n to ((2*n)-2) would be ((3*n)-2-i)
+	 * @param n -  Number of sides
 	 */
 	public Board(int n, Player[] players){
 		this.players = players;
-		
 		this.n = n;
 		
 		nRow = (2*n)-1;
@@ -35,13 +42,12 @@ public class Board {
 			}
 			
 			bArray[i] = rowArray;
-			
 		}
 		
 		// initialize decreasing rows (n+1 -- 2n-1) to null
 		
 		for (int i=n; i<nRow; i++) {
-			nCol = (nRow - i + n - 1);
+			nCol = (3 * n) - 2 - i;
 			
 			Position[] rowArray = new Position[nCol];
 			
@@ -63,6 +69,18 @@ public class Board {
 	}
 	
 	/**
+	 * @return true if pos1 and pos2 are adjacent/neighbors, false otherwise
+	 */
+	public boolean isAdjacent(Position pos1, Position pos2){
+		if (pos1.getNeighbors().contains(pos2)){
+			return true;
+		}
+		return false;
+	}
+	
+	/* SETTER METHODS */
+	
+	/**
 	 * Set Poisition of with coordinates (x, y) to be occupied by Player p
 	 */
 	public void setMove(int x, int y, Player p){
@@ -70,6 +88,8 @@ public class Board {
 		p.addPosition(this.getPosition(x, y), n);
 		return;
 	}
+	
+	/* GETTER METHODS */
 	
 	/**
 	 * @return n, the size of each side in the board
@@ -93,6 +113,8 @@ public class Board {
 		return this.players;
 	}
 	
+	/* MAIN METHOD */
+	
 	/**
 	 * Checks whether there is a winner in the board.
 	 * @return The name of the winner if there is a winner, null if there is no winner
@@ -100,15 +122,6 @@ public class Board {
 	public void hasWinner(){
 		Player winner;
 		
-		TripodCheck tripodCheck = new TripodCheck(this);
-		if ((winner = tripodCheck.check()) == null){
-			System.out.println("No winner yet");
-		} else {
-			System.out.println(winner.name);
-			System.out.println("Tripod");
-		}
-		
-		/*
 		LoopCheck loopCheck = new LoopCheck(this);
 		if ((winner = loopCheck.check()) == null){
 			TripodCheck tripodCheck = new TripodCheck(this);
@@ -121,43 +134,6 @@ public class Board {
 		} else {
 			System.out.println(winner.name);
 			System.out.println("Loop");
-		}*/
-	}
-	
-	/* HELPER FUNCTIONS */
-	
-	/**
-	 * For testing purposes
-	 */
-	public void printBoard(){
-		// Loop through all the elements in bArray
-		for (int i=0; i<this.bArray.length; i++){
-			for(int j=0; j<this.bArray[i].length; j++){
-				
-				// Prints out "-" if Position empty
-				if (this.bArray[i][j].isEmpty()){
-					System.out.print("-");
-					
-				// If not empty, prints out short name of owner of the Position
-				} else {
-					System.out.print(this.bArray[i][j].getOwner().s);
-					
-				}
-				//System.out.print("{"+ Position.getRealPosition(n, bArray[i][j])[0] + ", " + Position.getRealPosition(n, bArray[i][j])[1] +"}");
-				
-				System.out.print(" ");
-			}
-			System.out.println("");
 		}
-	}
-	
-	/**
-	 * @return true if pos1 and pos2 are adjacent/neighbors, false otherwise
-	 */
-	public boolean isAdjacent(Position pos1, Position pos2){
-		if (pos1.getNeighbors().contains(pos2)){
-			return true;
-		}
-		return false;
 	}
 }
