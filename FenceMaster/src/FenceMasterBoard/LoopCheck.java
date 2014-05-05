@@ -6,9 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * Contains algorithm to check whether there are any loops in the given board.
  * 
  * @author Marisa Tjoe (566322) & Erlangga Satria Gama (570748)
- *
  */
 public class LoopCheck implements CheckLogic {
 	// Board that needs loop-checking
@@ -78,8 +78,8 @@ public class LoopCheck implements CheckLogic {
 					// Make a List of Positions, containing all the
 					// Positions in the suspected loop
 					List<Position> currentLoop = currentPath.subList(
-							currentPath.indexOf(neighbor) + 1,
-							currentPath.indexOf(pos));
+							currentPath.indexOf(neighbor),
+							currentPath.indexOf(pos) + 1);
 
 					// Checks whether center Position(s) is/are either owned
 					// by a different player or is/are empty. If it is,
@@ -109,6 +109,8 @@ public class LoopCheck implements CheckLogic {
 	 *         or a Position owned by a different player
 	 */
 	private boolean centerDifferent(List<Position> currentLoop) {
+		
+		currentLoop = neatifyLoop(currentLoop);
 
 		// rowCurrentPath is a HashMap representation of the currentLoop, which
 		// will map the x coordinates to a LinkedList containing the y
@@ -167,5 +169,27 @@ public class LoopCheck implements CheckLogic {
 			}
 		}
 		return false;
+	}
+	
+	
+	/**
+	 * Prevent convoluted loop. Makes 3 cluttered adjacent positions reduced to only 2.
+	 * @return new neatified loopArray
+	 */
+	private List<Position> neatifyLoop(List<Position> loopArray){
+		int nCurr = 2;
+		int size = loopArray.size();
+		
+		while (nCurr < size){
+			while (b.isAdjacent(loopArray.get(nCurr), loopArray.get((nCurr < 2) ? (size + nCurr - 2):(nCurr-2)))) {
+				loopArray.remove(nCurr-1);
+				size = loopArray.size();
+				if (size <= 3) {
+					break;
+				}
+			}
+			nCurr++;
+		}
+		return loopArray;
 	}
 }

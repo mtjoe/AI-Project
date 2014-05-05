@@ -30,6 +30,7 @@ public class Main {
 		String input;
 		int i, n;
 		String[] entries;
+		int nEntries = 0;
 
 		/* Get value of n */
 
@@ -62,6 +63,7 @@ public class Main {
 			// If valid, loop through the entries, and add moves to the board
 			for (String e : entries) {
 				if (!e.equals("-")) {
+					nEntries++;
 					if (e.charAt(0) == players[0].s) {
 						b.setMove(i, j, players[0]);
 					} else if (e.charAt(0) == players[1].s) {
@@ -75,6 +77,13 @@ public class Main {
 				j++;
 			}
 		}
+
+		// Check is draw
+		if (nEntries == b.totalEntries){
+			System.out.println("Draw");
+			return false;
+		}
+		
 		return true;
 	}
 

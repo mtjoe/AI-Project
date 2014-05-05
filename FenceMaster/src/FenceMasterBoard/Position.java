@@ -1,12 +1,14 @@
 package FenceMasterBoard;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
+ * Correspond to a slot in a board. The objects of Type Board consist of 
+ * many different positions.
  * 
  * @author Marisa Tjoe (566322) & Erlangga Satria Gama (570748)
- *
  */
 public class Position {
 
@@ -50,6 +52,8 @@ public class Position {
 		this.setWhichEdge();
 	}
 
+	/* SETTER METHODS */
+	
 	/**
 	 * @return Set which side of player in the board
 	 */
@@ -98,9 +102,65 @@ public class Position {
 			}
 		}
 	}
+	
+	/**
+	 * If this Position is an edge position, set the variable 'isEdge' as true,
+	 * false otherwise
+	 */
+	private void setIsEdge() {
+		if ((x == 0) || (y == 0) || (x == ((2 * n) - 2))
+				|| ((y - x) == (n - 1))
+				|| (y == (x + (n - 1) - ((x - n + 1) * 2)))) {
+			this.isEdge = true;
+		} else {
+			this.isEdge = false;
+		}
+	}
+	
+	/**
+	 * Set this Position to be occupied by Player p
+	 */
+	public void setOccupy(Player p) {
+		this.owner = p;
+	}
+	
+	/**
+	 * If this Position is a non-corner position, set the variable 'isNonCorner'
+	 * as true, false otherwise
+	 */
+	private void setIsNonCorner() {
+		if ((Math.abs(x) % (n - 1) == 0) && (Math.abs(y) % (n - 1) == 0)
+				&& ((x != (n - 1)) || (y != (n - 1)))) {
+			this.isNonCorner = false;
+		} else {
+			this.isNonCorner = true;
+		}
+	}
+	
+	/* GETTER METHODS */
+	
+	/**
+	 * @return The player that is occupying this Position, null if empty
+	 */
+	public Player getOwner() {
+		return this.owner;
+	}
+	
+	/**
+	 * @return x-coordinate of this position
+	 */
+	public int getX() {
+		return this.x;
+	}
 
 	/**
-	 * 
+	 * @return y-coordinate of this position
+	 */
+	public int getY() {
+		return this.y;
+	}
+	
+	/**
 	 * @return a HashMap, which maps the direction in String (e.g. "N", "NW",
 	 *         "SE", etc) to a two-entry integer array, containing the
 	 *         coordinates {x, y}
@@ -129,90 +189,12 @@ public class Position {
 		}
 		return neighborsCoord;
 	}
-
-	/**
-	 * If this Position is an edge position, set the variable 'isEdge' as true,
-	 * false otherwise
-	 */
-	private void setIsEdge() {
-		if ((x == 0) || (y == 0) || (x == ((2 * n) - 2))
-				|| ((y - x) == (n - 1))
-				|| (y == (x + (n - 1) - ((x - n + 1) * 2)))) {
-			this.isEdge = true;
-		} else {
-			this.isEdge = false;
-		}
-	}
-
-	/**
-	 * If this Position is a non-corner position, set the variable 'isNonCorner'
-	 * as true, false otherwise
-	 */
-	private void setIsNonCorner() {
-		if ((Math.abs(x) % (n - 1) == 0) && (Math.abs(y) % (n - 1) == 0)
-				&& ((x != (n - 1)) || (y != (n - 1)))) {
-			this.isNonCorner = false;
-		} else {
-			this.isNonCorner = true;
-		}
-	}
-
-	/* SETTER METHODS */
-
-	/**
-	 * Set this Position to be occupied by Player p
-	 */
-	public void setOccupy(Player p) {
-		this.owner = p;
-	}
-
-	/* GETTER METHODS */
-
-	/**
-	 * @return true if this position is not occupied by any player, false
-	 *         otherwise
-	 */
-	public boolean isEmpty() {
-		if (this.owner == null) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * @return The player that is occupying this Position, null if empty
-	 */
-	public Player getOwner() {
-		return this.owner;
-	}
 	
-	/* NEIGHBOR GETTERS */
-
 	/**
-	 * @return x-coordinate of this position
+	 * @return the direction of the edge if isEdge is true, null if isEdge is flase
 	 */
-	public int getX() {
-		return this.x;
-	}
-
-	/**
-	 * @return y-coordinate of this position
-	 */
-	public int getY() {
-		return this.y;
-	}
-
-	/**
-	 * @return an ArrayList, consisting of the valid neighboring Positions of
-	 *         this Position
-	 */
-	public ArrayList<Position> getNeighbors() {
-		return (ArrayList<Position>) this.neighbors.values();
-	}
-	
-	public Position getNeighborInDir(String dir) {
-		return this.neighbors.get(dir);
+	public String getWhichEdge() {
+		return this.whichEdge;
 	}
 	
 	/**
@@ -237,6 +219,24 @@ public class Position {
 
 		return sameNeighbors;
 	}
+	
+	/**
+	 * @return an ArrayList, consisting of the valid neighboring Positions of
+	 *         this Position
+	 */
+	public Collection<Position> getNeighbors() {
+		return (this.neighbors.values());
+	}
+	
+	/**
+	 * @param dir - either one of {"W", "E", "NW", "NE", "SW", "SE"} 
+	 * @return The neighbor of this Position in the given direction
+	 */
+	public Position getNeighborInDir(String dir) {
+		return this.neighbors.get(dir);
+	}
+
+	/* HELPER METHODS */
 
 	/**
 	 * @return true if the position in coordinates (x, y) are valid positions
@@ -257,10 +257,16 @@ public class Position {
 		}
 		return false;
 	}
-
-
-	public String getWhichEdge() {
-		return this.whichEdge;
+	
+	/**
+	 * @return true if this position is not occupied by any player, false
+	 *         otherwise
+	 */
+	public boolean isEmpty() {
+		if (this.owner == null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-
 }

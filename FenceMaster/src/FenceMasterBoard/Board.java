@@ -1,9 +1,10 @@
 package FenceMasterBoard;
 
 /**
+ * The Board comes in the form of a 2-D ArrayList of Position Objects, to 
+ * represent each slot in the Board.
  * 
  * @author Marisa Tjoe (566322) & Erlangga Satria Gama (570748)
- *
  */
 public class Board {
 	private Player[] players; 
@@ -11,6 +12,7 @@ public class Board {
 	private int n;
 	private int nRow;
 	private int nCol;
+	int totalEntries;
 	
 	
 	/**
@@ -24,6 +26,7 @@ public class Board {
 	public Board(int n, Player[] players){
 		this.players = players;
 		this.n = n;
+		this.totalEntries = 0;
 		
 		nRow = (2*n)-1;
 		
@@ -34,6 +37,7 @@ public class Board {
 		// Initialize increasing rows (0 -- n) to null
 		for (int i=0; i<n; i++) {
 			nCol = n + i;
+			totalEntries += nCol;
 			
 			Position[] rowArray = new Position[nCol];
 			
@@ -48,6 +52,7 @@ public class Board {
 		
 		for (int i=n; i<nRow; i++) {
 			nCol = (3 * n) - 2 - i;
+			totalEntries += nCol;
 			
 			Position[] rowArray = new Position[nCol];
 			
